@@ -8,15 +8,20 @@ ASPHALT_GREEN_URL = 'https://www.asphaltgreen.org/ues/schedules/field-schedule?s
 SCHEDULE_TABLE_DIV_CLASS = 'schedule-zoom'
 
 class Scraper():
-    """
-    Scrapes the Asphalt Green field hours website.
-    """
+    """Scrapes the Asphalt Green field hours website."""
 
     @backoff.on_exception(backoff.expo,
                           requests.exceptions.Timeout,
                           max_tries=3)
     def get_html(self) -> str:
-        """Return the full asphalt green field hours page HTML"""
+        """Return the full asphalt green field hours page HTML.
+
+        Returns:
+            str: The full HTML string for the asphalt green field hours page
+
+        Raises:
+            HTTPError: If the HTTP call to the ashalt green field hours page fails
+        """
 
         response = requests.get(ASPHALT_GREEN_URL, timeout=10)
         response.raise_for_status()
@@ -26,7 +31,15 @@ class Scraper():
                           requests.exceptions.Timeout,
                           max_tries=3)
     def get_field_hours(self) -> list[tuple[datetime, datetime]]:
-        """Return the open field time blocks from the asphalt green field hours page"""
+        """Return the open field time blocks from the asphalt green field hours page.
+
+        Returns:
+            list[tuple[datetime,datetime]]: List of tuples representing time blocks of open field time
+
+        Raises:
+            HTTPError: If the HTTP call to the ashalt green field hours page fails
+            RuntimeError: If the schedule table cannot be found in the Asphalt Green website HTML
+        """
 
         html = self.get_html()
         soup = BeautifulSoup(html, 'lxml')
