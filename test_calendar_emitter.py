@@ -1,3 +1,4 @@
+import botocore
 import os
 import unittest
 from datetime import datetime
@@ -9,19 +10,6 @@ from calendaremitter import CalendarEmitter
 
 class TestCalendarEmitter(unittest.TestCase):
     """Tests for the Calendar Emitter class."""
-
-    @patch.dict('os.environ', {'ASPHALT_GREEN_CALENDAR_ID': 'fake_calendar_id'})
-    def test_environment_variable_for_calendar_id(self):
-        """Test that environment variable is correctly retrieved"""
-        emitter = CalendarEmitter()
-        self.assertEqual(emitter.google_calendar_client.calendar_id, 'fake_calendar_id')
-
-    @patch.dict('os.environ', {}, clear=True)
-    def test_runtime_error_when_env_var_missing(self):
-        """Test that a RuntimeError is raised when the environment variable is missing."""
-        with self.assertRaises(RuntimeError) as context:
-            CalendarEmitter()
-        self.assertEqual(str(context.exception), "ASPHALT_GREEN_CALENDAR_ID environment variable is not set")
 
     def test_emit_calendar_tuples(self):
         """Test method for the emit_calendar_tuples function"""
@@ -49,7 +37,7 @@ class TestCalendarEmitter(unittest.TestCase):
         mock_google_calendar_client.create_event.return_value = test_event
 
         emitter = CalendarEmitter(mock_google_calendar_client)
-        result = emitter.emit_calendar_tuples(test_tuples)
+        result = emitter.emit_calendar_tuples('test-calendar-id', test_tuples)
 
         self.assertTrue(mock_google_calendar_client.create_event.called)
         self.assertEqual(result, expected)
@@ -62,11 +50,12 @@ class TestCalendarEmitter(unittest.TestCase):
                 datetime(2024, 1, 5, 6, 0, tzinfo=ZoneInfo("America/New_York")),
             )
         ]
+        mock_google_calendar_client = Mock()
 
-        emitter = CalendarEmitter()
+        emitter = CalendarEmitter(mock_google_calendar_client)
 
         with self.assertRaises(ValueError) as context:
-            emitter.emit_calendar_tuples(invalid_calendar_tuples)
+            emitter.emit_calendar_tuples('test-calendar-id', invalid_calendar_tuples)
         self.assertEqual(str(context.exception),
                          'Invalid calendar time block: 2024-01-10 06:00:00-05:00 is after 2024-01-05 06:00:00-05:00')
 
@@ -83,7 +72,7 @@ class TestCalendarEmitter(unittest.TestCase):
 
         emitter = CalendarEmitter(mock_google_calendar_client)
 
-        self.assertRaises(HttpError, emitter.emit_calendar_tuples, test_tuples)
+        self.assertRaises(HttpError, emitter.emit_calendar_tuples, 'test-calendar-id', test_tuples)
 
     def test_clear_calendar(self):
         """Test method for the clear_calendar function"""
@@ -91,7 +80,7 @@ class TestCalendarEmitter(unittest.TestCase):
         mock_google_calendar_client.clear_calendar.return_value = None
 
         emitter = CalendarEmitter(mock_google_calendar_client)
-        emitter.clear_calendar()
+        emitter.clear_calendar('test_calendar_id')
 
         self.assertTrue(mock_google_calendar_client.clear_calendar.called)
 
@@ -102,7 +91,7 @@ class TestCalendarEmitter(unittest.TestCase):
 
         emitter = CalendarEmitter(mock_google_calendar_client)
 
-        self.assertRaises(HttpError, emitter.clear_calendar)
+        self.assertRaises(HttpError, emitter.clear_calendar, 'test-calendar-id')
 
 if __name__ == '__main__':
      unittest.main()
