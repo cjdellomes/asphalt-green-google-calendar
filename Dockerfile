@@ -1,10 +1,9 @@
-FROM public.ecr.aws/docker/library/python:3.13.0
+FROM public.ecr.aws/lambda/python:3.12
 
-WORKDIR /usr/src/app
+COPY requirements.txt ${LAMBDA_TASK_ROOT}
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
-COPY . .
+COPY . ${LAMBDA_TASK_ROOT}
 
-CMD [ "python", "./main.py" ]
+CMD [ "lambda_function.handler" ]

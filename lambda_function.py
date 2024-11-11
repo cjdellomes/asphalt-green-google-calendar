@@ -5,7 +5,7 @@ from googlecalendar import GoogleCalendarClient
 from calendaremitter import CalendarEmitter
 from scraper import Scraper
 
-def main():
+def handler(event, context):
     secrets_manager_client = SecretsManagerClient('us-east-1')
     service_account_info = json.loads(secrets_manager_client.get_secret('asphalt-green-google-calendar'))
     credentials = Credentials.from_service_account_info(service_account_info,
@@ -15,7 +15,9 @@ def main():
     calendar_id = secrets_manager_client.get_secret('asphalt-green-google-calendar-id')
 
     calendar_emitter.clear_calendar(calendar_id)
-    calendar_emitter.emit_calendar_tuples(calendar_id, Scraper().get_field_hours())
+    created_events = calendar_emitter.emit_calendar_tuples(calendar_id, Scraper().get_field_hours())
 
-if __name__ == "__main__":
-     main()
+    return {
+        'statusCode': 200,
+        'body': created_events
+    }
