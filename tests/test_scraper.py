@@ -149,5 +149,88 @@ class TestScraper(unittest.TestCase):
 
         self.assertRaises(RuntimeError, scraper.get_field_hours)
 
+    @patch('scraper.requests.get')
+    def test_get_field_hours_html_typo_space_surrounding_dash(self, mock_get):
+        """Test method for the get_field_hours function assuming typo spaces around the timeblock dash"""
+        mock_html = '''
+          <html>
+            <div class="schedule-zoom">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Sunday</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                    <th>Saturday</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <strong>
+                        October 18
+                      </strong>
+                      <br />
+                        6am -6:45am
+                      <br />
+                        (full field)
+                      <br />
+                      <br />
+                        11:30am- 2:45pm
+                      <br />
+                        (full field)
+                    </td>
+                    <td>
+                      <strong>
+                        October 19
+                      </strong>
+                      <br />
+                        6am - 7:15am
+                      <br />
+                        (full field)
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </html>'''
+        mock_get.return_value.ok = True
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.text = mock_html
+
+        scraper = Scraper()
+        results = scraper.get_field_hours()
+
+        expected_datetime_tuples = [
+            (
+                datetime(2024, 10, 18, 6, 0, tzinfo=ZoneInfo("America/New_York")),
+                datetime(2024, 10, 18, 6, 45, tzinfo=ZoneInfo("America/New_York"))
+            ),
+            (
+                datetime(2024, 10, 18, 11,30, tzinfo=ZoneInfo("America/New_York")),
+                datetime(2024, 10, 18, 14, 45, tzinfo=ZoneInfo("America/New_York"))
+            ),
+            (
+                datetime(2024, 10, 19, 6, 0, tzinfo=ZoneInfo("America/New_York")),
+                datetime(2024, 10, 19, 7, 15, tzinfo=ZoneInfo("America/New_York"))
+            )
+        ]
+
+        self.assertIsInstance(results, list)
+
+        for result_tuple, expected_tuple in zip(results, expected_datetime_tuples):
+            self.assertIsInstance(result_tuple, tuple)
+            self.assertEqual(len(result_tuple), 2)
+            self.assertTrue(all(isinstance(dt, datetime) for dt in result_tuple))
+            self.assertEqual(result_tuple, expected_tuple)
+
 if __name__ == '__main__':
     unittest.main()

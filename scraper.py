@@ -1,4 +1,5 @@
 import backoff
+import re
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
@@ -68,7 +69,10 @@ class Scraper():
         for entry in calendar_entries:
             if 'No Public Field Hours' in entry:
                 continue
-            tokens = entry.split()
+
+            sanitized_entry = self._get_sanitized_calendar_entry(entry)
+
+            tokens = sanitized_entry.split()
 
             # remove the field size descriptions so we are just left with datetime info
             tokens = [token for token in tokens if '(' not in token and ')' not in token]
@@ -103,3 +107,6 @@ class Scraper():
                     calendar_tuples.append((start_iso, end_iso))
 
         return calendar_tuples
+
+    def _get_sanitized_calendar_entry(self, entry: str) -> str:
+        return re.sub(r'\s*-\s*', '-', entry) # remove possible typo spaces around timeblock dashes
