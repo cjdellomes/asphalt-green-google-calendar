@@ -23,6 +23,15 @@ jobs:
       - checkout
       - setup_remote_docker # Required for building and pushing Docker images
       - run:
+          name: Debug Environment Variables
+          command: |
+            echo "AWS_ROLE_ARN: $AWS_ROLE_ARN"
+            echo "AWS_REGION: $AWS_REGION"
+            echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
+      - run:
+          name: Confirm OIDC Authentication
+          command: aws sts get-caller-identity
+      - run:
           name: Log in to AWS ECR
           command: |
             aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
