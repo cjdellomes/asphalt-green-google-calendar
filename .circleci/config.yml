@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-cli: circleci/aws-cli@3.1.5
+
 jobs:
   test:
     docker:
@@ -28,12 +31,9 @@ jobs:
             echo "AWS_ROLE_ARN: $AWS_ROLE_ARN"
             echo "AWS_REGION: $AWS_REGION"
             echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
-      - run:
-          name: Debug OIDC Token
-          command: cat /proc/self/environ | grep AWS_WEB_IDENTITY_TOKEN_FILE
-      - run:
-          name: View OIDC Token
-          command: cat $AWS_WEB_IDENTITY_TOKEN_FILE
+      - aws-cli/setup:
+          role-arn: $AWS_ROLE_ARN
+          aws-region: $AWS_REGION
       - run:
           name: Confirm OIDC Authentication
           command: aws sts get-caller-identity
