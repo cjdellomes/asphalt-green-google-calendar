@@ -1,0 +1,54 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.8 
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+      - run:
+          name: Run Unit Tests
+          command: |
+            pytest tests/
+
+  build-and-deploy:
+    docker:
+      - image: cimg/base:stable 
+    steps:
+      - checkout
+      - setup_remote_docker # Required for building and pushing Docker images
+      - run:
+          name: Log in to AWS ECR
+          command: |
+            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+      - run:
+          name: Build Docker Image
+          command: |
+            IMAGE_NAME=asphalt-green-google-calendar
+            IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME
+            docker build -t $IMAGE_URI .
+            echo "export IMAGE_URI=$IMAGE_URI" >> $BASH_ENV
+      - run:
+          name: Push Docker Image to ECR
+          command: |
+            docker push $IMAGE_URI
+      - run:
+          name: Update AWS Lambda
+          command: |
+            aws lambda update-function-code \
+              --function-name asphalt-green-google-calendar \
+              --image-uri $IMAGE_URI
+
+workflows:
+  version: 2
+  ci-cd:
+    jobs:
+      - test
+      - build-and-deploy:
+          requires:
+            - test
