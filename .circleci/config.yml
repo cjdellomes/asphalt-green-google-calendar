@@ -29,6 +29,12 @@ jobs:
             echo "AWS_REGION: $AWS_REGION"
             echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
       - run:
+          name: Debug OIDC Token
+          command: cat /proc/self/environ | grep AWS_WEB_IDENTITY_TOKEN_FILE
+      - run:
+          name: View OIDC Token
+          command: cat $AWS_WEB_IDENTITY_TOKEN_FILE
+      - run:
           name: Confirm OIDC Authentication
           command: aws sts get-caller-identity
       - run:
