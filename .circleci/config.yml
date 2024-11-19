@@ -30,7 +30,7 @@ jobs:
             echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
       - run:
           name: Setup AWS CLI
-          command: aws sts assume-role --role_arn $AWS_ROLE_ARN --role_session_name CircleCI-Session
+          command: aws sts assume-role --role-arn $AWS_ROLE_ARN --role-session-name CircleCI-Session
       - run:
           name: Confirm OIDC Authentication
           command: aws sts get-caller-identity
