@@ -20,6 +20,9 @@ jobs:
             pytest tests/
 
   build-and-deploy:
+    environment:
+      AWS_REGION: $AWS_REGION
+      AWS_ROLE_ARN: $AWS_ROLE_ARN
     docker:
       - image: cimg/aws:2024.03
     steps:
@@ -32,8 +35,8 @@ jobs:
             echo "AWS_REGION: $AWS_REGION"
             echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
       - aws-cli/setup:
-          role-arn: $AWS_ROLE_ARN
-          aws-region: $AWS_REGION
+          role-arn: AWS_ROLE_ARN
+          aws-region: AWS_REGION
       - run:
           name: Confirm OIDC Authentication
           command: aws sts get-caller-identity
