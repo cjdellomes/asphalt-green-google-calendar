@@ -1,9 +1,9 @@
 import json
 from google.oauth2.service_account import Credentials
-from secretsmanager import SecretsManagerClient
-from googlecalendar import GoogleCalendarClient
-from calendaremitter import CalendarEmitter
-from scraper import Scraper
+from source.secretsmanager import SecretsManagerClient
+from source.googlecalendar import GoogleCalendarClient
+from source.calendaremitter import CalendarEmitter
+from source.scraper import Scraper
 
 def handler(event, context):
     secrets_manager_client = SecretsManagerClient('us-east-1')
@@ -21,3 +21,6 @@ def handler(event, context):
         'statusCode': 200,
         'body': created_events
     }
+
+if __name__ == '__main__':
+    handler(None, None)
