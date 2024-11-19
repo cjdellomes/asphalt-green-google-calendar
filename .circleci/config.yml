@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  aws-cli: circleci/aws-cli@3.1.5
-
 jobs:
   test:
     docker:
@@ -20,9 +17,6 @@ jobs:
             pytest tests/
 
   build-and-deploy:
-    environment:
-      AWS_REGION: $AWS_REGION
-      AWS_ROLE_ARN: $AWS_ROLE_ARN
     docker:
       - image: cimg/aws:2024.03
     steps:
@@ -34,9 +28,9 @@ jobs:
             echo "AWS_ROLE_ARN: $AWS_ROLE_ARN"
             echo "AWS_REGION: $AWS_REGION"
             echo "AWS_ACCOUNT_ID: $AWS_ACCOUNT_ID"
-      - aws-cli/setup:
-          role-arn: AWS_ROLE_ARN
-          aws-region: AWS_REGION
+      - run:
+          name: Setup AWS CLI
+          command: aws sts assume-role --role_arn $AWS_ROLE_ARN --role_session_name CircleCI-Session
       - run:
           name: Confirm OIDC Authentication
           command: aws sts get-caller-identity
