@@ -60,6 +60,7 @@ jobs:
             IMAGE_NAME=asphalt-green-google-calendar
             IMAGE_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$IMAGE_NAME
             docker build -t $IMAGE_URI .
+            echo "IMAGE_URI: $IMAGE_URI"
             echo "export IMAGE_URI=$IMAGE_URI" >> $BASH_ENV
       - run:
           name: Push Docker Image to ECR
@@ -70,7 +71,7 @@ jobs:
           command: |
             aws lambda update-function-code \
               --function-name asphalt-green-google-calendar \
-              --image-uri $IMAGE_URI
+              --image-uri $IMAGE_URI:latest
 
 workflows:
   version: 2
