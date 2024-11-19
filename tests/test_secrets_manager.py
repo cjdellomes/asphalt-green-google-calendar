@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 from botocore.exceptions import ClientError
-from secretsmanager import SecretsManagerClient
+from source.secretsmanager import SecretsManagerClient
 
 class TestSecretsManagerClient(unittest.TestCase):
     """Tests for the SecretsManagerClient class"""

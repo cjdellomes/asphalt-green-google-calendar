@@ -1,14 +1,14 @@
 import unittest
 import requests
 from datetime import datetime
-from unittest.mock import patch
 from zoneinfo import ZoneInfo
-from scraper import Scraper
+from unittest.mock import patch
+from source.scraper import Scraper
 
 class TestScraper(unittest.TestCase):
     """Tests for the Scraper class."""
 
-    @patch('scraper.requests.get')
+    @patch('source.scraper.requests.get')
     def test_get_html_successful_http_call(self, mock_get):
         """Test method for the get_html function."""
         mock_get.return_value.ok = True
@@ -20,7 +20,7 @@ class TestScraper(unittest.TestCase):
 
         self.assertEqual(result, 'Mocked response text')
 
-    @patch('scraper.requests.get')
+    @patch('source.scraper.requests.get')
     def test_get_html_failed_http_call(self, mock_get):
         """Test method for the get_html function assuming a failed http call."""
         mock_get.return_value.status_code = 404
@@ -30,7 +30,7 @@ class TestScraper(unittest.TestCase):
         scraper = Scraper()
         self.assertRaises(requests.exceptions.HTTPError, scraper.get_html)
 
-    @patch('scraper.requests.get')
+    @patch('source.scraper.requests.get')
     def test_get_field_hours_successful_http_call(self, mock_get):
         """Test method for the get_field_hours function."""
         mock_html = '''
@@ -127,7 +127,7 @@ class TestScraper(unittest.TestCase):
         # not sure yet what this will actually look like in the asphalt green website
         pass
 
-    @patch('scraper.requests.get')
+    @patch('source.scraper.requests.get')
     def test_get_field_hours_failed_http_call(self, mock_get):
         """Test method for the get_field_hours function assuming a failed http call."""
         mock_get.return_value.status_code = 404
@@ -138,7 +138,7 @@ class TestScraper(unittest.TestCase):
 
         self.assertRaises(requests.exceptions.HTTPError, scraper.get_field_hours)
 
-    @patch('scraper.requests.get')
+    @patch('source.scraper.requests.get')
     def test_get_field_hours_failed_html_parse(self, mock_get):
         """Test method for the get_field_hours function assuming a failed html parsing."""
         mock_get.return_value.ok = True
@@ -149,7 +149,7 @@ class TestScraper(unittest.TestCase):
 
         self.assertRaises(RuntimeError, scraper.get_field_hours)
 
-    @patch('scraper.requests.get')
+    @patch('source.scraper.requests.get')
     def test_get_field_hours_html_typo_space_surrounding_dash(self, mock_get):
         """Test method for the get_field_hours function assuming typo spaces around the timeblock dash"""
         mock_html = '''

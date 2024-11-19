@@ -5,8 +5,8 @@ from datetime import datetime
 from unittest.mock import patch, Mock
 from zoneinfo import ZoneInfo
 from googleapiclient.errors import HttpError
-from googlecalendar import GoogleCalendarClient
-from calendaremitter import CalendarEmitter
+from source.googlecalendar import GoogleCalendarClient
+from source.calendaremitter import CalendarEmitter
 
 class TestCalendarEmitter(unittest.TestCase):
     """Tests for the Calendar Emitter class."""

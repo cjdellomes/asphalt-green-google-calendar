@@ -1,7 +1,7 @@
 import datetime
 from typing import Dict
-from scraper import Scraper
-from googlecalendar import GoogleCalendarClient
+from source.scraper import Scraper
+from source.googlecalendar import GoogleCalendarClient
 
 class CalendarEmitter():
     """Emits calendar time blocks to Google Calendar"""
