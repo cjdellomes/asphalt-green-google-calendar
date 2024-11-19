@@ -7,13 +7,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install AWS CLI
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-            aws --version  # Verify AWS CLI installation
-      - run:
           name: Install Dependencies
           command: |
             python -m pip install --upgrade pip
@@ -25,7 +18,7 @@ jobs:
 
   build-and-deploy:
     docker:
-      - image: cimg/base:stable 
+      - image: circleci/aws-cli:2.7.23
     steps:
       - checkout
       - setup_remote_docker # Required for building and pushing Docker images
