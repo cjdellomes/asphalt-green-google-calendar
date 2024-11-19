@@ -18,7 +18,7 @@ jobs:
 
   build-and-deploy:
     docker:
-      - image: circleci/aws-cli:2.7.23
+      - image: cimg/aws:2024.03
     steps:
       - checkout
       - setup_remote_docker # Required for building and pushing Docker images
