@@ -114,13 +114,6 @@ class TestScraper(unittest.TestCase):
             self.assertEqual(result_tuple, expected_tuple)
 
     @unittest.skip("undefined scrape source behavior")
-    def test_get_field_hours_daylight_savings_time(self):
-        """Test method for the get_field_hours function assuming daylight savings time."""
-        # created the test function signature, but leaving it blank for now
-        # not sure yet what this will actually look like in the asphalt green website
-        pass
-
-    @unittest.skip("undefined scrape source behavior")
     def test_get_field_hours_new_year(self):
         """Test method for the get_field_hours function assuming new year change."""
         # created the test function signature, but leaving it blank for now
