@@ -92,16 +92,16 @@ class TestScraper(unittest.TestCase):
 
         expected_datetime_tuples = [
             (
-                datetime(2024, 10, 18, 6, 0, tzinfo=ZoneInfo("America/New_York")),
-                datetime(2024, 10, 18, 6, 45, tzinfo=ZoneInfo("America/New_York"))
+                datetime(datetime.now().year, 10, 18, 6, 0, tzinfo=ZoneInfo("America/New_York")),
+                datetime(datetime.now().year, 10, 18, 6, 45, tzinfo=ZoneInfo("America/New_York"))
             ),
             (
-                datetime(2024, 10, 18, 11,30, tzinfo=ZoneInfo("America/New_York")),
-                datetime(2024, 10, 18, 14, 45, tzinfo=ZoneInfo("America/New_York"))
+                datetime(datetime.now().year, 10, 18, 11,30, tzinfo=ZoneInfo("America/New_York")),
+                datetime(datetime.now().year, 10, 18, 14, 45, tzinfo=ZoneInfo("America/New_York"))
             ),
             (
-                datetime(2024, 10, 19, 6, 0, tzinfo=ZoneInfo("America/New_York")),
-                datetime(2024, 10, 19, 7, 15, tzinfo=ZoneInfo("America/New_York"))
+                datetime(datetime.now().year, 10, 19, 6, 0, tzinfo=ZoneInfo("America/New_York")),
+                datetime(datetime.now().year, 10, 19, 7, 15, tzinfo=ZoneInfo("America/New_York"))
             )
         ]
 
@@ -197,16 +197,16 @@ class TestScraper(unittest.TestCase):
 
         expected_datetime_tuples = [
             (
-                datetime(2024, 10, 18, 6, 0, tzinfo=ZoneInfo("America/New_York")),
-                datetime(2024, 10, 18, 6, 45, tzinfo=ZoneInfo("America/New_York"))
+                datetime(datetime.now().year, 10, 18, 6, 0, tzinfo=ZoneInfo("America/New_York")),
+                datetime(datetime.now().year, 10, 18, 6, 45, tzinfo=ZoneInfo("America/New_York"))
             ),
             (
-                datetime(2024, 10, 18, 11,30, tzinfo=ZoneInfo("America/New_York")),
-                datetime(2024, 10, 18, 14, 45, tzinfo=ZoneInfo("America/New_York"))
+                datetime(datetime.now().year, 10, 18, 11,30, tzinfo=ZoneInfo("America/New_York")),
+                datetime(datetime.now().year, 10, 18, 14, 45, tzinfo=ZoneInfo("America/New_York"))
             ),
             (
-                datetime(2024, 10, 19, 6, 0, tzinfo=ZoneInfo("America/New_York")),
-                datetime(2024, 10, 19, 7, 15, tzinfo=ZoneInfo("America/New_York"))
+                datetime(datetime.now().year, 10, 19, 6, 0, tzinfo=ZoneInfo("America/New_York")),
+                datetime(datetime.now().year, 10, 19, 7, 15, tzinfo=ZoneInfo("America/New_York"))
             )
         ]
 
