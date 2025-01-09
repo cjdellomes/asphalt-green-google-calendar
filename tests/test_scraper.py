@@ -113,13 +113,6 @@ class TestScraper(unittest.TestCase):
             self.assertTrue(all(isinstance(dt, datetime) for dt in result_tuple))
             self.assertEqual(result_tuple, expected_tuple)
 
-    @unittest.skip("undefined scrape source behavior")
-    def test_get_field_hours_new_year(self):
-        """Test method for the get_field_hours function assuming new year change."""
-        # created the test function signature, but leaving it blank for now
-        # not sure yet what this will actually look like in the asphalt green website
-        pass
-
     @patch('source.scraper.requests.get')
     def test_get_field_hours_failed_http_call(self, mock_get):
         """Test method for the get_field_hours function assuming a failed http call."""
